@@ -1,0 +1,19 @@
+{
+  "name": "hozon",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wizo06/Hozon.git"
+  },
+  "author": "wizo06",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wizo06/Hozon/issues"
+  },
+  "homepage": "https://github.com/wizo06/Hozon#readme",
+  "dependencies": {
+    "puppeteer": "^5.0.0"
+  }
+}
