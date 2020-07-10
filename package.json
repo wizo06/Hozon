@@ -2,7 +2,9 @@
   "name": "hozon",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "artstation": "node artstation/src/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wizo06/Hozon.git"

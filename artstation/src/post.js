@@ -14,7 +14,10 @@ const getMediaURLwithPostID = (page, url) => {
 
       if (divCollection.length !== 0) {
         for (div of divCollection) {
-          temp.push(`${postID} ${div.firstElementChild.children[3].src}`);
+          temp.push({
+            postID: postID,
+            url: div.firstElementChild.children[3].src
+          });
         }
       }
 
