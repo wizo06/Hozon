@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "artstation": "node artstation/src/index.js"
+    "artstation": "node src/artstation/index.js",
+    "instagram": "node src/instagram/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,7 @@
   },
   "homepage": "https://github.com/wizo06/Hozon#readme",
   "dependencies": {
+    "logger": "github:wizo06/logger",
     "puppeteer": "^5.0.0"
   }
 }
