@@ -4,7 +4,8 @@ const createJobForMedia = (page, postURL, username) => {
   return new Promise(async (resolve, reject) => {
     await page.goto(postURL);
 
-    let postID = postURL.split('/').pop();
+    const urlSplit = postURL.split('/');
+    const postID = urlSplit[urlSplit.length - 1];
 
     let result = await page.evaluate((DIV_CLASS, postID, username) => {
       let temp = [];
@@ -16,7 +17,8 @@ const createJobForMedia = (page, postURL, username) => {
           temp.push({
             username: username,
             mediaURL: div.firstElementChild.children[3].src,
-            fileName: `${postID}---${fileName}` 
+            fileName: `${postID}---${fileName}`,
+            platform: `artstation`
           });
         }
       }

@@ -7,8 +7,9 @@ const handleJob = (job) => {
     const username = job.username;
     const mediaURL = job.mediaURL;
     const fileName = job.fileName;
+    const platform = job.platform;
 
-    const downloadDir = path.join(process.cwd(), `archives/${username}`);
+    const downloadDir = path.join(process.cwd(), `archives/${platform}/${username}`);
     const file = fs.createWriteStream(path.join(downloadDir, fileName));
 
     const curl = spawn('curl', [mediaURL]);

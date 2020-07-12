@@ -1,4 +1,4 @@
-const POST_CLASS = 'project-image';
+const POST_CLASS = 'v1Nh3';
 
 const scrollAndScrape = (page) => {
   return new Promise(async (resolve, reject) => {
@@ -11,8 +11,8 @@ const scrollAndScrape = (page) => {
       let result = await page.evaluate((POST_CLASS) => {
         let temp = [];
         let htmlCollection = document.getElementsByClassName(POST_CLASS);
-        for (a of htmlCollection) {
-          temp.push(a.href);
+        for (div of htmlCollection) {
+          temp.push(div.firstElementChild.href);
         }
         return temp;
       }, POST_CLASS);

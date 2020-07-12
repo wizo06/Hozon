@@ -4,13 +4,22 @@ const logger = require('logger');
 const fs = require('fs');
 const path = require('path');
 
-const profile = require(path.join(process.cwd(), 'src/artstation/profile.js'));
-const post = require(path.join(process.cwd(), 'src/artstation/post.js'));
+const profile = require(path.join(process.cwd(), 'src/instagram/profile.js'));
+const post = require(path.join(process.cwd(), 'src/instagram/post.js'));
 const download = require(path.join(process.cwd(), 'src/shared/download.js'));
+
+const isPrivate = (page) => {
+  return new Promise(async (resolve, reject) => {
+    let result = await page.evaluate(() => {
+      return window._sharedData.entry_data.ProfilePage[0].graphql.user.is_private;
+    });
+    resolve(result);
+  });
+};
 
 const arrOfUsernames = [];
 readline.createInterface({
-  input: fs.createReadStream(path.join(process.cwd(), 'watchlist/artstation_usernames.txt'))
+  input: fs.createReadStream(path.join(process.cwd(), 'watchlist/instagram_usernames.txt'))
 })
 .on('line', username => {
   arrOfUsernames.push(username);
@@ -20,15 +29,18 @@ readline.createInterface({
 
   const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 600 } });
   const page = await browser.newPage();
-  
+
   // Iterate over all usernames
   for (username of arrOfUsernames) {
     logger.info(`[Current profile: ${username}] Processing...`);
 
     // Step 1: Create directory for downloads
-    fs.mkdirSync(path.join(process.cwd(), `archives/artstation/${username}`), { recursive: true });
-    
-    await page.goto(`https://www.artstation.com/${username}`);
+    fs.mkdirSync(path.join(process.cwd(), `archives/instagram/${username}`), { recursive: true });
+
+    await page.goto(`https://www.instagram.com/${username}`);
+
+    // SKip current username if profile is private
+    if (await isPrivate(page)) continue;
 
     // Step 1: Get posts URL
     logger.info(`[Current profile: ${username}] Extracting posts URL...`);
