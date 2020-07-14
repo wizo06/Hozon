@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "artstation": "node src/artstation/index.js",
-    "instagram": "node src/instagram/index.js"
+    "instagram": "node src/instagram/index.js",
+    "youtube": "src/youtube/start.sh"
   },
   "repository": {
     "type": "git",

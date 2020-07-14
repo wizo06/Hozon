@@ -31,15 +31,9 @@ npm run instagram
 ```
 4. Media will be saved locally at `archives/instagram/`
 ## YouTube
-1. Download `youtube-dl`
+1. Add channels URL in `watchlist/youtube_usernames.txt` (must have an empty line at the end of file)
+2. Start hoarding!
 ```
-mkdir bin
-curl -L "https://yt-dl.org/downloads/latest/youtube-dl" -o "bin/youtube-dl"
-chmod a+rx bin/youtube-dl
+npm run youtube
 ```
-2. Download `ffmpeg`
-```
-curl "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz" -o "bin/ffmpeg.tar.xz"
-tar -xf "ffmpeg.tar.xz"
-
-```
+3. Media will be saved locally at `archives/youtube/`

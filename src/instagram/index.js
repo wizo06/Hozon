@@ -32,7 +32,7 @@ readline.createInterface({
 
   // Iterate over all usernames
   for (username of arrOfUsernames) {
-    logger.info(`[Current profile: ${username}] Processing...`);
+    logger.info(`[Current username: ${username}] Processing...`);
 
     // Step 1: Create directory for downloads
     fs.mkdirSync(path.join(process.cwd(), `archives/instagram/${username}`), { recursive: true });
@@ -43,11 +43,11 @@ readline.createInterface({
     if (await isPrivate(page)) continue;
 
     // Step 1: Get posts URL
-    logger.info(`[Current profile: ${username}] Extracting posts URL...`);
+    logger.info(`[Current username: ${username}] Extracting posts URL...`);
     const arrOfpostsURL = await profile.scrollAndScrape(page);
 
     // Iterate over all posts URL
-    logger.info(`[Current profile: ${username}] Creating job for each media in each post...`);
+    logger.info(`[Current username: ${username}] Creating job for each media in each post...`);
     for (postURL of arrOfpostsURL) {
       // Step 2: Create a job for each media
       let job = await post.createJobForMedia(page, postURL, username);

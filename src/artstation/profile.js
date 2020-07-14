@@ -23,7 +23,7 @@ const scrollAndScrape = (page) => {
       // Scroll
       currentHeight = await page.evaluate('document.body.scrollHeight');
       await page.evaluate(`window.scrollTo(0, ${currentHeight})`);
-      await page.waitFor(1000);
+      await page.waitFor(2000);
       newHeight = await page.evaluate('document.body.scrollHeight');
     }
 
