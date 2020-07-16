@@ -6,6 +6,7 @@ Hozon (保存), meaning "preserve" in Japanese, is a collection of hoarding scri
 - [Artstation (Desktop environment required)](#artstation)
 - [Instagram (Desktop environment required)](#instagram)
 - [YouTube](#youtube)
+- [Twitter](#twitter)
 
 # Getting Started
 ## Artstation
@@ -37,3 +38,14 @@ npm run instagram
 npm run youtube
 ```
 3. Media will be saved locally at `archives/youtube/`
+## Twitter
+1. Install node dependencies
+```
+npm install
+```
+2. Add usernames in `watchlist/twitter_usernames.txt`
+3. Start hoarding!
+```
+npm run twitter
+```
+4. Media will be saved locally at `archives/twitter/`
