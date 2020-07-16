@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 
 const profile = require(path.join(process.cwd(), 'src/twitter/profile.js'));
-const post = require(path.join(process.cwd(), 'src/twitter/post.js'));
 const download = require(path.join(process.cwd(), 'src/shared/download.js'));
 const credentials = require(path.join(process.cwd(), 'config/credentials.json'));
 
@@ -28,13 +27,15 @@ readline.createInterface({
 .on('close', async () => {
   let arrOfJobs = [];
 
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 600 } });
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 720 } });
   const page = await browser.newPage();
   
   // Login
   await page.goto(`https://twitter.com/login`);
-  await page.type(``, credentials.twitter.username);
-  await page.type(``, credentials.twitter.password);
+  await page.waitFor(1000);
+  await page.type(`[name="session[username_or_email]"]`, credentials.twitter.username);
+  await page.type(`[name="session[password]"]`, credentials.twitter.password);
+  await page.click(`[data-testid="LoginForm_Login_Button"]`);
 
   // Iterate over all usernames
   for (username of arrOfUsernames) {
@@ -43,22 +44,16 @@ readline.createInterface({
     // Step 1: Create directory for downloads
     fs.mkdirSync(path.join(process.cwd(), `archives/twitter/${username}`), { recursive: true });
 
+    // Delay to make sure it lands on /username/media, otherwise it will land on /username instead
+    await page.waitFor(1000);
     await page.goto(`https://twitter.com/${username}/media`);
 
     // SKip current username if profile is private
     if (await isPrivate(page)) continue;
 
-    // Step 1: Get posts URL
+    // Step 2: Get posts URL
     logger.info(`[Current username: ${username}] Extracting posts URL...`);
-    const arrOfpostsURL = await profile.scrollAndScrape(page);
-
-    // Iterate over all posts URL
-    logger.info(`[Current username: ${username}] Creating job for each media in each post...`);
-    for (postURL of arrOfpostsURL) {
-      // Step 2: Create a job for each media
-      let job = await post.createJobForMedia(page, postURL, username);
-      arrOfJobs = [...arrOfJobs, ...job];
-    }
+    arrOfJobs = [...arrOfJobs, ...await profile.scrollAndCreateJob(page, username)];
   }
   // Step 3: Close browser once all usernames have been processed
   logger.info(`Closing puppeteer...`);

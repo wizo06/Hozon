@@ -42,26 +42,26 @@ readline.createInterface({
     // SKip current username if profile is private
     if (await isPrivate(page)) continue;
 
-    // Step 1: Get posts URL
+    // Step 2: Get posts URL
     logger.info(`[Current username: ${username}] Extracting posts URL...`);
     const arrOfpostsURL = await profile.scrollAndScrape(page);
 
     // Iterate over all posts URL
     logger.info(`[Current username: ${username}] Creating job for each media in each post...`);
     for (postURL of arrOfpostsURL) {
-      // Step 2: Create a job for each media
+      // Step 3: Create a job for each media
       let job = await post.createJobForMedia(page, postURL, username);
       arrOfJobs = [...arrOfJobs, ...job];
     }
   }
-  // Step 3: Close browser once all usernames have been processed
+  // Step 4: Close browser once all usernames have been processed
   logger.info(`Closing puppeteer...`);
   await browser.close();
 
   // Iterate over all jobs
   logger.info(`Downloading media...`);
   for (job of arrOfJobs) {
-    // Step 4: Feed the job into the downloader module
+    // Step 5: Feed the job into the downloader module
     await download.handleJob(job);
   }
 });

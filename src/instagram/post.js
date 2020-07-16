@@ -4,10 +4,8 @@ const BUTTON_CLASS = '_6CZji';
 
 const createJobForMedia = (page, postURL, username) => {
   return new Promise(async (resolve, reject) => {
-    await page.goto(postURL, {
-      timeout: 0,
-      waitUntil: 'networkidle0'
-    });
+    await page.goto(postURL);
+    await page.waitFor(1000);
 
     const urlSplit = postURL.split('/');
     const postID = urlSplit[urlSplit.length - 2];
