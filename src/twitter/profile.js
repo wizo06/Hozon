@@ -16,7 +16,7 @@ const scrollAndCreateJob = (page, username) => {
           let imgCollection = article.querySelectorAll('img[alt="Image"]');
           for (img of imgCollection) {
             const ext = img.src.match(/format=([^&])*/g)[0].split('=').pop();
-            const fileName = `${img.src.replace(/&name=.*/, '').split('/').pop().split('?')[0]}${ext}`;
+            const fileName = `${img.src.replace(/&name=.*/, '').split('/').pop().split('?')[0]}.${ext}`;
             temp.push({
               username: username,
               mediaURL: img.src,
