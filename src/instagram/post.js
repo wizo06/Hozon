@@ -48,7 +48,7 @@ const createJobForMedia = (page, postURL, username) => {
 
     while (nextButton) {
       await page.click(`button.${BUTTON_CLASS}`);
-      await page.waitFor(100);
+      await page.waitFor(500);
 
       let moreResult = await page.evaluate((IMG_CLASS, VID_CLASS, postID, username) => {
         let temp = [];

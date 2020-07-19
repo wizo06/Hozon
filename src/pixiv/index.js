@@ -18,7 +18,7 @@ readline.createInterface({
 .on('close', async () => {
   let arrOfJobs = [];
 
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 600 } });
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 1920, height: 1080 } });
   const page = await browser.newPage();
   
   // Iterate over all usernames
@@ -29,6 +29,7 @@ readline.createInterface({
     fs.mkdirSync(path.join(process.cwd(), `archives/pixiv/${username}`), { recursive: true });
     
     await page.goto(`https://www.pixiv.net/en/users/${username}/artworks`);
+    await page.waitFor(4000);
 
     // Step 2: Get posts URL
     logger.info(`[Current username: ${username}] Extracting posts URL...`);

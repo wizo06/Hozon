@@ -47,6 +47,7 @@ readline.createInterface({
     // Delay to make sure it lands on /username/media, otherwise it will land on /username instead
     await page.waitFor(1000);
     await page.goto(`https://twitter.com/${username}/media`);
+    await page.waitFor(1000);
 
     // SKip current username if profile is private
     if (await isPrivate(page)) continue;
