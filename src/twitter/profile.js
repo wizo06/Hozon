@@ -39,9 +39,7 @@ const scrollAndCreateJob = (page, username) => {
     }
 
     // Dedupe
-    console.log(arrOfJobs.length)
     arrOfJobs = [...new Set(arrOfJobs)];
-    console.log(arrOfJobs.length)
     resolve(arrOfJobs);
   });
 };
