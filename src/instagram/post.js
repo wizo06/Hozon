@@ -5,7 +5,7 @@ const BUTTON_CLASS = '_6CZji';
 const createJobForMedia = (page, postURL, username) => {
   return new Promise(async (resolve, reject) => {
     await page.goto(postURL);
-    await page.waitFor(1000);
+    await page.waitFor(500);
 
     const urlSplit = postURL.split('/');
     const postID = urlSplit[urlSplit.length - 2];
@@ -48,7 +48,7 @@ const createJobForMedia = (page, postURL, username) => {
 
     while (nextButton) {
       await page.click(`button.${BUTTON_CLASS}`);
-      await page.waitFor(500);
+      await page.waitFor(200);
 
       let moreResult = await page.evaluate((IMG_CLASS, VID_CLASS, postID, username) => {
         let temp = [];

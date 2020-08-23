@@ -75,8 +75,10 @@ readline.createInterface({
 
   // Iterate over all jobs
   logger.info(`Downloading media...`);
+  const jobBar = new progress(':current/:total', { total: arrOfJobs.length });
   for (job of arrOfJobs) {
     // Step 4: Feed the job into the downloader module
     await download.handleJob(job);
+    jobBar.tick();
   }
 });

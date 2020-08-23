@@ -21,6 +21,7 @@
   "homepage": "https://github.com/wizo06/Hozon#readme",
   "dependencies": {
     "logger": "github:wizo06/logger",
+    "progress": "^2.0.3",
     "puppeteer": "^5.0.0"
   }
 }

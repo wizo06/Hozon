@@ -1,10 +1,13 @@
 const POST_CLASS = 'v1Nh3';
+const BUTTON_CLASS = 'tCibT';
 
 const scrollAndScrape = (page) => {
   return new Promise(async (resolve, reject) => {
     let scrapedPostsURLs = [];
     let currentHeight = 0;
     let newHeight = 1;
+
+    await page.click(`button.${BUTTON_CLASS}`);
 
     while (newHeight > currentHeight) {
       // Scrape
@@ -23,7 +26,7 @@ const scrollAndScrape = (page) => {
       // Scroll
       currentHeight = await page.evaluate('document.body.scrollHeight');
       await page.evaluate(`window.scrollTo(0, ${currentHeight})`);
-      await page.waitFor(1000);
+      await page.waitFor(1500);
       newHeight = await page.evaluate('document.body.scrollHeight');
     }
 

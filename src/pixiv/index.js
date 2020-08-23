@@ -37,10 +37,12 @@ readline.createInterface({
 
     // Iterate over all posts URL
     logger.info(`[Current username: ${username}] Creating job for each media in each post...`);
+    const postBar = new progress(':current/:total', { total: arrOfpostsURL.length });
     for (postURL of arrOfpostsURL) {
       // Step 3: Create a job for each media
       let job = await post.createJobForMedia(page, postURL, username);
       arrOfJobs = [...arrOfJobs, ...job];
+      postBar.tick();
     }
   }
   // Step 4: Close browser once all usernames have been processed
@@ -49,8 +51,10 @@ readline.createInterface({
 
   // Iterate over all jobs
   logger.info(`Downloading media...`);
+  const jobBar = new progress(':current/:total', { total: arrOfJobs.length });
   for (job of arrOfJobs) {
     // Step 5: Feed the job into the downloader module
     await download.handleJob(job);
+    jobBar.tick();
   }
 });
