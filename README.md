@@ -51,6 +51,7 @@ npm install
 ```
 2. Add usernames in `watchlist/twitter_usernames.txt`
 3. Add credentials in `config/credentials.json` (required)
+4. To avoid getting error while scraping, it is recommended to turn on "Display media that may contain sensitive content"
 4. Start hoarding!
 ```
 npm run twitter

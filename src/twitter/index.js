@@ -17,6 +17,13 @@ const isPrivate = (page) => {
   });
 };
 
+const isNotLoggedIn = (page) => {
+  return new Promise(async (resolve, reject) => {
+    let result = await page.evaluate('window.__META_DATA__.isLoggedIn');
+    resolve(!result);
+  });
+}
+
 const arrOfUsernames = [];
 readline.createInterface({
   input: fs.createReadStream(path.join(process.cwd(), 'watchlist/twitter_usernames.txt'))
@@ -36,6 +43,12 @@ readline.createInterface({
   await page.type(`[name="session[username_or_email]"]`, credentials.twitter.username);
   await page.type(`[name="session[password]"]`, credentials.twitter.password);
   await page.click(`[data-testid="LoginForm_Login_Button"]`);
+
+  if (await isNotLoggedIn(page)) {
+    logger.error(`Could not log in.`);
+    await browser.close();
+    process.kill(0);
+  }
 
   // Iterate over all usernames
   for (username of arrOfUsernames) {
