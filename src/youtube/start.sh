@@ -25,47 +25,6 @@ _info () {
   echo -e "${FG_CYAN}i ${FG_WHITE}${1}${DEFAULT}"
 }
 
-# script_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-# cd "${script_path}"
-
-mkdir -p bin
-
-# youtube-dl
-if [ -f bin/youtube-dl ]; then
-  _success "Found youtube-dl binary"
-else
-  _info "Downloading youtube-dl ..."
-  cd bin
-  curl -s -L "https://yt-dl.org/downloads/latest/youtube-dl" -o "youtube-dl"
-
-  chmod a+rx youtube-dl
-  cd ..
-  _success "Installed youtube-dl"
-fi
-
-# FFmpeg
-if [ -f bin/ffmpeg ]; then
-  _success "Found FFmpeg binary"
-else
-  _info "Downloading ffmpeg ..."
-  cd bin
-  curl -s -o "ffmpeg.tar.xz" "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-  tar -xf "ffmpeg.tar.xz"
-  rm "ffmpeg.tar.xz"
-
-  _info "Moving ffmpeg binary to bin/ ..."
-  cd */.
-  mv ffmpeg ../
-
-  _info "Cleaning up ..."
-  rm -rf *
-  cd ..
-  rmdir *
-  chmod 700 ffmpeg
-  cd ..
-  _success "Installed FFmpeg"
-fi
-
 while IFS= read -r channel_url
 do
   _info "[Current username: ${channel_url}] Processing..."
