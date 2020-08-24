@@ -26,12 +26,12 @@ _info () {
 }
 
 # unzip
-if dpkg --get-selections | grep -q "^unzip[[:space:]]*install$" >/dev/null; then
-  _success "unzip installed"
-else
-  _info "installing unzip"
-  sudo apt install unzip
-fi
+# if dpkg --get-selections | grep -q "^unzip[[:space:]]*install$" >/dev/null; then
+#   _success "unzip installed"
+# else
+#   _info "installing unzip"
+#   sudo apt install unzip
+# fi
 
 # tar
 if dpkg --get-selections | grep -q "^tar[[:space:]]*install$" >/dev/null; then

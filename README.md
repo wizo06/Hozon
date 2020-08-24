@@ -48,7 +48,7 @@ npm run twitter
 ```
 5. Media will be saved locally at `archives/twitter/`
 ## YouTube
-1. Add channels URL in `watchlist/youtube_usernames.txt` **(must have an empty line at the end of file)**
+1. Add channels URL in `watchlist/youtube_usernames.txt`
 2. Start hoarding!
 ```
 npm run youtube

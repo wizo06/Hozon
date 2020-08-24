@@ -7,7 +7,7 @@
     "instagram": "node src/instagram/index.js",
     "pixiv": "node src/pixiv/index.js",
     "twitter": "node src/twitter/index.js",
-    "youtube": "src/youtube/start.sh"
+    "youtube": "node src/youtube/index.js"
   },
   "repository": {
     "type": "git",

@@ -21,13 +21,17 @@ const curl = (job) => {
 
 const youtube_dl = (job) => {
   return new Promise((resolve, reject) => {
-    const username = job.username;
-    const mediaURL = job.mediaURL;
-    const platform = job.platform;
-  
-    const flags = ['-f', 'best', '-o', `archives/${platform}/${username}/%(id)s---%(title)s.%(ext)s`];
-    const subprocess = spawn(path.join(process.cwd(), 'bin/youtube-dl'), [mediaURL, ...flags]);
-    subprocess.on('exit', code => { resolve() });
+    if (job.platform === 'twitter') {
+      const flags = ['-f', 'best', '-i', '--no-warnings', '-o', `archives/${job.platform}/${job.username}/%(id)s---%(title)s.%(ext)s`];
+      const subprocess = spawn(path.join(process.cwd(), 'bin/youtube-dl'), [job.mediaURL, ...flags]);
+      subprocess.on('exit', code => { resolve() });
+    }
+    else if (job.platform === 'youtube') {
+      const flags = ['-f', 'bestvideo+bestaudio', '--ffmpeg-location', 'bin/ffmpeg', '-i', '--no-warnings', '-o', `archives/${job.platform}/%(uploader)s/%(id)s---%(title)s.%(ext)s`];
+      const subprocess = spawn(path.join(process.cwd(), 'bin/youtube-dl'), [job.mediaURL, ...flags]);
+      subprocess.stdout.on('data', data => { process.stdout.write(data.toString()) });
+      subprocess.on('exit', code => { resolve() });
+    }
   });
 };
 
