@@ -2,7 +2,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const handleJob = (job) => {
+const curl = (job) => {
   return new Promise((resolve, reject) => {
     const username = job.username;
     const mediaURL = job.mediaURL;
@@ -12,13 +12,26 @@ const handleJob = (job) => {
     const downloadDir = path.join(process.cwd(), `archives/${platform}/${username}`);
     const file = fs.createWriteStream(path.join(downloadDir, fileName));
 
-    const curl = spawn('curl', [mediaURL]);
-    curl.stdout.on('data', data => { file.write(data) });
-    curl.stdout.on('end', () => { file.end() });
-    curl.on('exit', code => { resolve() });
-  })
-}
+    const subprocess = spawn('curl', [mediaURL]);
+    subprocess.stdout.on('data', data => { file.write(data) });
+    subprocess.stdout.on('end', () => { file.end() });
+    subprocess.on('exit', code => { resolve() });
+  });
+};
+
+const youtube_dl = (job) => {
+  return new Promise((resolve, reject) => {
+    const username = job.username;
+    const mediaURL = job.mediaURL;
+    const platform = job.platform;
+  
+    const flags = ['-f', 'best', '-o', `archives/${platform}/${username}/%(id)s---%(title)s.%(ext)s`];
+    const subprocess = spawn(path.join(process.cwd(), 'bin/youtube-dl'), [mediaURL, ...flags]);
+    subprocess.on('exit', code => { resolve() });
+  });
+};
 
 module.exports = {
-  handleJob
+  curl,
+  youtube_dl
 }

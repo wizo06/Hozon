@@ -3,6 +3,7 @@ const readline = require('readline');
 const logger = require('logger');
 const fs = require('fs');
 const path = require('path');
+const progress = require('progress');
 
 const profile = require(path.join(process.cwd(), 'src/twitter/profile.js'));
 const download = require(path.join(process.cwd(), 'src/shared/download.js'));
@@ -32,9 +33,10 @@ readline.createInterface({
   arrOfUsernames.push(username);
 })
 .on('close', async () => {
-  let arrOfJobs = [];
+  let arrOfImgJobs = [];
+  let arrOfVideoJobs = [];
 
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 720 } });
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 1440 } });
   const page = await browser.newPage();
   
   // Login
@@ -43,6 +45,7 @@ readline.createInterface({
   await page.type(`[name="session[username_or_email]"]`, credentials.twitter.username);
   await page.type(`[name="session[password]"]`, credentials.twitter.password);
   await page.click(`[data-testid="LoginForm_Login_Button"]`);
+  await page.waitFor(1000);
 
   if (await isNotLoggedIn(page)) {
     logger.error(`Could not log in.`);
@@ -67,18 +70,28 @@ readline.createInterface({
 
     // Step 2: Get posts URL
     logger.info(`[Current username: ${username}] Extracting posts URL...`);
-    arrOfJobs = [...arrOfJobs, ...await profile.scrollAndCreateJob(page, username)];
+    const arrOfJobs = await profile.scrollAndCreateJob(page, username);
+    arrOfImgJobs = [...arrOfImgJobs, ...arrOfJobs.img];
+    arrOfVideoJobs = [...arrOfVideoJobs, ...arrOfJobs.video];
   }
   // Step 3: Close browser once all usernames have been processed
   logger.info(`Closing puppeteer...`);
   await browser.close();
 
   // Iterate over all jobs
-  logger.info(`Downloading media...`);
-  const jobBar = new progress(':current/:total', { total: arrOfJobs.length });
-  for (job of arrOfJobs) {
+  logger.info(`Downloading images...`);
+  const imgBar = new progress(':current/:total', { total: arrOfImgJobs.length });
+  for (job of arrOfImgJobs) {
     // Step 4: Feed the job into the downloader module
-    await download.handleJob(job);
-    jobBar.tick();
+    await download.curl(job);
+    imgBar.tick();
+  }
+
+  logger.info('Downloading videos...');
+  const videoBar = new progress(':current/:total', { total: arrOfVideoJobs.length });
+  for (job of arrOfVideoJobs) {
+    // Step 4: Feed the job into the downloader module
+    await download.youtube_dl(job);
+    videoBar.tick();
   }
 });

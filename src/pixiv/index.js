@@ -3,6 +3,7 @@ const readline = require('readline');
 const logger = require('logger');
 const fs = require('fs');
 const path = require('path');
+const progress = require('progress');
 
 const profile = require(path.join(process.cwd(), 'src/pixiv/profile.js'));
 const post = require(path.join(process.cwd(), 'src/pixiv/post.js'));
@@ -54,7 +55,7 @@ readline.createInterface({
   const jobBar = new progress(':current/:total', { total: arrOfJobs.length });
   for (job of arrOfJobs) {
     // Step 5: Feed the job into the downloader module
-    await download.handleJob(job);
+    await download.curl(job);
     jobBar.tick();
   }
 });

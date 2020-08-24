@@ -26,7 +26,7 @@ readline.createInterface({
 .on('close', async () => {
   let arrOfJobs = [];
 
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 600 } });
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 800, height: 1440 } });
   const page = await browser.newPage();
 
   // Iterate over all usernames
@@ -65,7 +65,7 @@ readline.createInterface({
   logger.info(`Downloading media...`);
   for (job of arrOfJobs) {
     // Step 5: Feed the job into the downloader module
-    await download.handleJob(job);
+    await download.curl(job);
     jobBar.tick();
   }
 });
