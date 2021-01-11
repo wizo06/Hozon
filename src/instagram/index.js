@@ -37,7 +37,7 @@ readline.createInterface({
     fs.mkdirSync(path.join(process.cwd(), `archives/instagram/${username}`), { recursive: true });
 
     await page.goto(`https://www.instagram.com/${username}`);
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
 
     // SKip current username if profile is private
     if (await isPrivate(page)) continue;

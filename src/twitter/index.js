@@ -41,11 +41,11 @@ readline.createInterface({
   
   // Login
   await page.goto(`https://twitter.com/login`);
-  await page.waitFor(1000);
+  await page.waitForTimeout(1000);
   await page.type(`[name="session[username_or_email]"]`, credentials.twitter.username);
   await page.type(`[name="session[password]"]`, credentials.twitter.password);
   await page.click(`[data-testid="LoginForm_Login_Button"]`);
-  await page.waitFor(1000);
+  await page.waitForTimeout(1000);
 
   if (await isNotLoggedIn(page)) {
     logger.error(`Could not log in.`);
@@ -61,9 +61,9 @@ readline.createInterface({
     fs.mkdirSync(path.join(process.cwd(), `archives/twitter/${username}`), { recursive: true });
 
     // Delay to make sure it lands on /username/media, otherwise it will land on /username instead
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
     await page.goto(`https://twitter.com/${username}/media`);
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
 
     // SKip current username if profile is private
     if (await isPrivate(page)) continue;

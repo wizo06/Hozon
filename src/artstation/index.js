@@ -30,7 +30,7 @@ readline.createInterface({
     fs.mkdirSync(path.join(process.cwd(), `archives/artstation/${username}`), { recursive: true });
     
     await page.goto(`https://www.artstation.com/${username}`);
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
 
     // Step 2: Get posts URL
     logger.info(`[Current username: ${username}] Extracting posts URL...`);

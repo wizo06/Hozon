@@ -30,7 +30,7 @@ readline.createInterface({
     fs.mkdirSync(path.join(process.cwd(), `archives/pixiv/${username}`), { recursive: true });
     
     await page.goto(`https://www.pixiv.net/en/users/${username}/artworks`);
-    await page.waitFor(4000);
+    await page.waitForTimeout(4000);
 
     // Step 2: Get posts URL
     logger.info(`[Current username: ${username}] Extracting posts URL...`);
