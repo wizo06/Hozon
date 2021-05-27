@@ -26,11 +26,9 @@ Once you've created your Project, and then an App inside that Project, generate 
 Open the `config/config.toml` file, and set `api.twitter.bearer` to your Bearer Token. Example:
 
 ```toml
-...
 [api]
   [api.twitter]
   bearer = "mysupersecretbearertoken"
-...
 
 ```
 
@@ -38,9 +36,8 @@ Open the `config/config.toml` file, and set `api.twitter.bearer` to your Bearer 
 
 Provide a list of usernames whose media you want to scrape from, by adding each username inside `watchlist/twitter.txt`. One line per username.
 
-**Step 3: Run the script**
+**Step 3: Start the scraper**
 
-Finally, run the script with:
 ```
 npm run twitter
 ```
