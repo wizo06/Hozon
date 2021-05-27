@@ -16,3 +16,7 @@ npm i
 ```
 npm start
 ```
+
+The files will be downloaded inside the `archive/` folder.
+
+The pattern of the full path is `archive/<platform>/<userId>(<username>)/<postId>/<mediaId>`
