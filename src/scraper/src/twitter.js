@@ -60,7 +60,7 @@ const fetchAndSend = async (myUrl, opts, nextPageToken, userId, username, channe
             url: keyUrlPair[mediaId],
             platform: 'twitter'
           }
-          logger.info(`${userId}(${username})/${postId}/${mediaId} ${url}`)
+          logger.info(`${userId}(${username})/${tweet.id}/${mediaId} ${keyUrlPair[mediaId]}`)
           channel.publish(
             config.rabbit.exchange,
             config.rabbit.routingKey,
