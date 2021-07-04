@@ -3,8 +3,8 @@
     "start": "node src/worker.js"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "amqplib": "^0.8.0",
-    "logger": "github:wizo06/logger",
-    "toml-loader": "github:wizo06/toml-loader"
+    "logger": "github:wizo06/logger"
   }
 }

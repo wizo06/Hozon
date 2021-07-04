@@ -4,7 +4,7 @@ const fs = require('fs')
 const logger = require('logger')
 const readline = require('readline')
 
-const config = require('toml-loader')('../../../config/config.toml')
+const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))
 
 /**
  * Hit Twitter's v2 API endpoint to retrieve the userId of a given username

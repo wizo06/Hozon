@@ -1,4 +1,3 @@
 archive/
 node_modules/
-config/*
-!config/template.toml
+config/config.toml

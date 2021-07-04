@@ -1,6 +1,7 @@
 const amqp = require('amqplib')
 const logger = require('logger')
-const config = require('toml-loader')('../../config/config.toml')
+
+const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))
 
 ;(async () => {
   try {

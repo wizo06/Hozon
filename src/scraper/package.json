@@ -3,9 +3,9 @@
     "twitter": "node src/twitter.js"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "amqplib": "^0.8.0",
     "logger": "github:wizo06/logger",
-    "node-fetch": "^2.6.1",
-    "toml-loader": "github:wizo06/toml-loader"
+    "node-fetch": "^2.6.1"
   }
 }
