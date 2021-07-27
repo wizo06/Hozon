@@ -4,8 +4,9 @@
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
+    "@wizo06/logger": "^1.1.0",
     "amqplib": "^0.8.0",
-    "logger": "github:wizo06/logger",
+    "cheerio": "^1.0.0-rc.10",
     "node-fetch": "^2.6.1"
   }
 }

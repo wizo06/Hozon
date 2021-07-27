@@ -1,7 +1,7 @@
 const amqp = require('amqplib')
 const https = require('https')
 const fs = require('fs')
-const logger = require('logger')
+const logger = require('@wizo06/logger')
 const path = require('path')
 
 const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))

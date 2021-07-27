@@ -1,0 +1,19 @@
+[api]
+  [api.twitter]
+  bearer = ""
+  
+  [api.instagram]
+  cookie = ''
+
+[rabbit]
+protocol = "amqp"
+hostname = "localhost"
+port = "5672"
+username = "guest"
+password = "guest"
+heartbeat = 60 # seconds
+vhost = "/"
+exchange = "hozon"
+routingKey = "download"
+queue = "downloadQueue"
+prefetch = 1

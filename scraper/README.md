@@ -19,7 +19,7 @@ npm i
 ## Twitter
 **Step 1: API token**
 
-Hozon uses Twitter's v2 API directly (no libraries or wrappers) by consuming it with HTTP requests. You will have to create your own Twitter Project and App in [Twitter's Developer Portal](https://developer.twitter.com/en/portal/dashboard). As of writing this (May 24th, 2021), Twitter's v2 API can only be accessed by Apps *inside* a Project.
+Hozon uses Twitter's v2 API. This means you will have to create your own Twitter Project and App in [Twitter's Developer Portal](https://developer.twitter.com/en/portal/dashboard). As of writing this (May 24th, 2021), Twitter's v2 API can only be accessed by Apps *inside* a Project.
 
 Once you've created your Project, and then an App inside that Project, generate a **Bearer Token** for that App.
 
@@ -29,7 +29,6 @@ Open the `config/config.toml` file, and set `api.twitter.bearer` to your Bearer 
 [api]
   [api.twitter]
   bearer = "mysupersecretbearertoken"
-
 ```
 
 **Step 2: Usernames**
