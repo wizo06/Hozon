@@ -1,14 +1,18 @@
-# Step 1: Install RabbitMQ
+# Step 1: Install RabbitMQ server
 
 The official documentation can be found [here](https://www.rabbitmq.com/download.html).
 
-## RabbitMQ server on Ubuntu 20.04
+## Ubuntu 20.04
 
 If you plan to run the RabbitMQ server on Ubuntu 20.04 specifically, you can skip the official documentation and just run the included `install.sh` script instead. The instructions were extracted from the official documentation.
 ```
 chmod 700 install.sh
 ./install.sh
 ```
+
+## Other platforms
+
+To install RabbitMQ server on other platforms, please follow the instructions found in the official documentation.
 
 # Step 2: Start the RabbitMQ Server
 ```
@@ -56,7 +60,12 @@ Step 1: Create a config file called `config.toml` by making a copy of `template.
 
 The script will pull configuration data from the `config.toml` file to setup the Exchange, Queue, and Binding. If you wish to make any changes to the configuration, do so now.
 
-Step 2: Run the included `createAndBind.js` script.
+Step 2: Install dependencies
+```
+npm i
+```
+
+Step 3: Run the included `createAndBind.js` script.
 ```
 node createAndBind.js
 ```

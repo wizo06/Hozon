@@ -1,7 +1,8 @@
 const amqp = require('amqplib')
 const logger = require('@wizo06/logger')
+const { readFileSync } = require('fs')
 
-const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))
+const config = require('@iarna/toml').parse(readFileSync('config/config.toml'))
 
 ;(async () => {
   try {
