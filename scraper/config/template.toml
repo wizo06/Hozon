@@ -1,9 +1,8 @@
-[api]
-  [api.twitter]
-  bearer = ""
+[twitter]
+bearer = ""
   
-  [api.instagram]
-  cookie = ''
+[instagram]
+cookie = ''
 
 [rabbit]
 protocol = "amqp"

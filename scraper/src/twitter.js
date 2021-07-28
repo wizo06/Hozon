@@ -1,20 +1,20 @@
-const amqp = require('amqplib')
 const fetch = require('node-fetch')
 const fs = require('fs')
 const logger = require('@wizo06/logger')
+const rabbit = require('../helpers/rabbit.js')
 const readline = require('readline')
 
 const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))
 
 /**
- * Hit Twitter's v2 API endpoint to retrieve the userId of a given username
+ * Query the API to retrieve the userId of a given username
  */
 const getUserIdByUsername = (username) => {
   return new Promise(async (resolve, reject) => {
     try {
       logger.info(`Retrieving userId for ${username}`)
       const opts = {
-        headers: { 'Authorization': `Bearer ${config.api.twitter.bearer}` }
+        headers: { 'Authorization': `Bearer ${config.twitter.bearer}` }
       }
       const res = await fetch(`https://api.twitter.com/2/users/by/username/${username}`, opts)
       const json = await res.json()
@@ -23,24 +23,22 @@ const getUserIdByUsername = (username) => {
     }
     catch (e) {
       logger.error(e)
-
     }
   })
 }
 
 /**
- * Hit Twitter's v2 API endpoint to retrieve the url of media and then
- * send a message to RabbitMQ. This is a recursive function that will call itself
- * if there is pagination in the API response.
+ * Query the API to retrieve the url of media and then
+ * send a message to RabbitMQ. This function will recursively call itself
+ * until next page is false.
  */
-const fetchAndSend = async (myUrl, opts, nextPageToken, userId, username, channel) => {
+const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
   try {
-    if (nextPageToken) myUrl.searchParams.set('pagination_token', nextPageToken)
-
     const res = await fetch(myUrl.href, opts)
     const json = await res.json()
-    
+
     if (json.errors) return logger.error(json.errors)
+    if (json.status === 401) return logger.error(json)
     if (json.includes) {
       const keyUrlPair = {}
       const media = json.includes.media.filter(x => x.type === 'photo')
@@ -52,27 +50,23 @@ const fetchAndSend = async (myUrl, opts, nextPageToken, userId, username, channe
       for (const tweet of tweets) {
         for (const mediaId of tweet.attachments.media_keys) {
           if (!keyUrlPair[mediaId]) continue
-          const message = {
-            userId,
-            username,
-            postId: tweet.id,
-            mediaId,
-            url: keyUrlPair[mediaId],
-            platform: 'twitter'
-          }
-          logger.info(`${userId}(${username})/${tweet.id}/${mediaId} ${keyUrlPair[mediaId]}`)
-          channel.publish(
-            config.rabbit.exchange,
-            config.rabbit.routingKey,
-            Buffer.from(JSON.stringify(message)),
-            { persistent: true }
-          )
+
+          rabbit.publish({ 
+            userId, 
+            username, 
+            postId: tweet.id, 
+            mediaId, 
+            url: keyUrlPair[mediaId], 
+            platform: 'twitter', 
+            channel 
+          })
         }
       }
     }
 
     if (json.meta?.next_token) {
-      await fetchAndSend(myUrl, opts, json.meta?.next_token, userId, username, channel)
+      myUrl.searchParams.set('pagination_token', json.meta?.next_token)
+      await fetchAndSend(myUrl, opts, userId, username, channel)
     }
     else {
       return Promise.resolve()
@@ -85,14 +79,7 @@ const fetchAndSend = async (myUrl, opts, nextPageToken, userId, username, channe
 
 ;(async () => {
   try {
-    const connection = await amqp.connect(config.rabbit)
-    logger.success('Connection to RabbitMQ established')
-    
-    const channel = await connection.createChannel()
-    logger.success('Channel created')
-
-    await channel.checkExchange(config.rabbit.exchange)
-    logger.success(`Exchange confirmed`)
+    const { connection, channel } = await rabbit.getChannel()
 
     const rl = readline.createInterface({
       input: fs.createReadStream('watchlist/twitter.txt'),
@@ -107,18 +94,15 @@ const fetchAndSend = async (myUrl, opts, nextPageToken, userId, username, channe
       myUrl.searchParams.set('exclude', 'retweets')
       myUrl.searchParams.set('expansions', 'attachments.media_keys')
       myUrl.searchParams.set('media.fields', 'url')
+
       const opts = {
-        headers: { 'Authorization': `Bearer ${config.api.twitter.bearer}` }
+        headers: { 'Authorization': `Bearer ${config.twitter.bearer}` }
       }
   
-      await fetchAndSend(myUrl, opts, null, userId, username, channel)
+      await fetchAndSend(myUrl, opts, userId, username, channel)
     }
 
-    await channel.close()
-    logger.success('Channel closed')
-
-    await connection.close()
-    logger.success('Connection to RabbitMQ closed')
+    await rabbit.closeConnection({ connection, channel })
   }
   catch (e) {
     logger.error(e)

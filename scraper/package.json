@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "instagram": "node src/instagram.js",
     "twitter": "node src/twitter.js"
   },
   "dependencies": {
