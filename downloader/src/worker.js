@@ -2,7 +2,6 @@ const amqp = require('amqplib')
 const https = require('https')
 const fs = require('fs')
 const logger = require('@wizo06/logger')
-const path = require('path')
 
 const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))
 
@@ -13,16 +12,18 @@ const download = msg => {
       username,
       postId,
       mediaId,
+      ext,
       url,
       platform
     } = msg
-  
-    fs.mkdirSync(`archive/${platform}/${userId}(${username})/${postId}`, { recursive: true })
-    const ext = path.extname(url)
-    const file = fs.createWriteStream(`archive/${platform}/${userId}(${username})/${postId}/${mediaId}${ext}`)
+
+    fs.mkdirSync(`archive/${platform}`, { recursive: true })
+    const downloadPath = `archive/${platform}/${userId}(${username}) - ${postId} - ${mediaId}${ext}`
+    const file = fs.createWriteStream(downloadPath)
+    logger.info(`Downloading to: ${downloadPath}`)
     https.get(url, res => {
       res.pipe(file)
-      resolve()
+      res.on('end', () => resolve())
     })
   })
 }
@@ -48,19 +49,18 @@ const download = msg => {
       try {
         const job = JSON.parse(msg.content)
         logger.success(`Received new job`)
-        logger.info(job)
 
         await download(job)
         logger.success('Downloaded')
 
         await channel.ack(msg)
-        logger.success('Ack')
+        logger.success(`Ack'ed`)
       }
       catch (e) {
         logger.error(e)
 
         await channel.nack(msg, false, true)
-        logger.error('Nack')
+        logger.error(`Nack'ed`)
       }
     })
   }

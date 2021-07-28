@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hozon (保存), meaning "preserve" in Japanese, is an application for archiving media (images and videos) that are posted on social media platforms by any public user.
+Hozon (保存), meaning "preserve" in Japanese, is an application for archiving images that are posted on social media platforms by any public user.
 
 ## WIP features
 
