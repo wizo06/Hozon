@@ -26,17 +26,11 @@ const closeConnection = async ({ connection, channel }) => {
   return Promise.resolve()
 }
 
-const publish = ({ userId, username, postId, mediaId, url, platform, channel }) => {
-  const message = {
-    userId,
-    username,
-    postId,
-    mediaId,
-    url,
-    platform
-  }
-  const separator = `${logger.color.magenta}=>${logger.format.reset}`
-  logger.info(`${userId}(${username}) ${separator} ${postId} ${separator} ${mediaId} ${separator} ${url}`)
+const publish = ({ message, channel }) => {
+  const { userId, username, postId, mediaId, ext, platform } = message
+  const separator = `${logger.color.magenta}-${logger.format.reset}`
+  logger.info(`Publishing: ${platform} ${separator} ${userId}(${username}) ${separator} ${postId} ${separator} ${mediaId}${ext}`)
+  
   channel.publish(
     config.rabbit.exchange,
     config.rabbit.routingKey,

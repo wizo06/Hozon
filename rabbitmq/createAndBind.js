@@ -38,6 +38,6 @@ const config = require('@iarna/toml').parse(readFileSync('config/config.toml'))
     logger.success('Connection closed')
   }
   catch (e) {
-    console.log(e)
+    logger.error(e)
   }
 })()

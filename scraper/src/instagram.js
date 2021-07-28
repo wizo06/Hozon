@@ -61,33 +61,37 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
       if (childEdges) {
         for (const childEdge of childEdges) {
           const mediaLink = new URL(childEdge.node.display_url)
-          const mediaId = basename(mediaLink.pathname, extname(mediaLink.pathname))
-
-          rabbit.publish({ 
+          const ext = extname(mediaLink.pathname)
+          const mediaId = basename(mediaLink.pathname, ext)
+  
+          const message = { 
             userId, 
             username, 
             postId, 
             mediaId, 
+            ext,
             url: mediaLink.href, 
             platform: 'instagram', 
-            channel 
-          })
+          }
+          rabbit.publish({ message, channel })
         }        
       }
       // Post has single image
       else {
         const mediaLink = new URL(edge.node.display_url)
-        const mediaId = basename(mediaLink.pathname, extname(mediaLink.pathname))
+        const ext = extname(mediaLink.pathname)
+        const mediaId = basename(mediaLink.pathname, ext)
 
-        rabbit.publish({ 
+        const message = { 
           userId, 
           username, 
           postId, 
           mediaId, 
+          ext,
           url: mediaLink.href, 
           platform: 'instagram', 
-          channel 
-        })
+        }
+        rabbit.publish({ message, channel })
       }
     }
 
@@ -115,7 +119,7 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
   
     for await (const username of rl) {
       const userId = await getUserIdByUsername(username)
-  
+
       const myUrl = new URL(`https://www.instagram.com/graphql/query/`)
       myUrl.searchParams.set('query_hash', '8c2a529969ee035a5063f2fc8602a0fd')
       myUrl.searchParams.set('variables', `{"id":"${userId}","first":12}`)
@@ -132,5 +136,4 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
   catch (e) {
     logger.error(e)
   }
-
 })()

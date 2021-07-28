@@ -1,3 +1,4 @@
+const { basename, extname } = require('path')
 const fetch = require('node-fetch')
 const fs = require('fs')
 const logger = require('@wizo06/logger')
@@ -9,22 +10,20 @@ const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'
 /**
  * Query the API to retrieve the userId of a given username
  */
-const getUserIdByUsername = (username) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      logger.info(`Retrieving userId for ${username}`)
-      const opts = {
-        headers: { 'Authorization': `Bearer ${config.twitter.bearer}` }
-      }
-      const res = await fetch(`https://api.twitter.com/2/users/by/username/${username}`, opts)
-      const json = await res.json()
-      if (json.errors) return reject(json)
-      resolve(json.data?.id)
+const getUserIdByUsername = async (username) => {
+  try {
+    logger.info(`Retrieving userId for ${username}`)
+    const opts = {
+      headers: { 'Authorization': `Bearer ${config.twitter.bearer}` }
     }
-    catch (e) {
-      logger.error(e)
-    }
-  })
+    const res = await fetch(`https://api.twitter.com/2/users/by/username/${username}`, opts)
+    const json = await res.json()
+    if (json.errors) return Promise.reject(json)
+    return Promise.resolve(json.data?.id)
+  }
+  catch (e) {
+    logger.error(e)
+  }
 }
 
 /**
@@ -39,6 +38,9 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
 
     if (json.errors) return logger.error(json.errors)
     if (json.status === 401) return logger.error(json)
+
+    // Fetch media links if current pagination has them.
+    // Media links are inside .includes
     if (json.includes) {
       const keyUrlPair = {}
       const media = json.includes.media.filter(x => x.type === 'photo')
@@ -48,18 +50,23 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
   
       const tweets = json.data.filter(x => x.attachments)
       for (const tweet of tweets) {
-        for (const mediaId of tweet.attachments.media_keys) {
-          if (!keyUrlPair[mediaId]) continue
-
-          rabbit.publish({ 
+        for (const mediaKey of tweet.attachments.media_keys) {
+          if (!keyUrlPair[mediaKey]) continue
+          
+          const ext = extname(keyUrlPair[mediaKey])
+          const mediaId = basename(keyUrlPair[mediaKey], ext)
+          
+          const message = { 
             userId, 
             username, 
             postId: tweet.id, 
             mediaId, 
-            url: keyUrlPair[mediaId], 
+            ext,
+            url: keyUrlPair[mediaKey], 
             platform: 'twitter', 
-            channel 
-          })
+          }
+          rabbit.publish({ message, channel })
+
         }
       }
     }
