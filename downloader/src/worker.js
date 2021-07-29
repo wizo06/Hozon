@@ -1,12 +1,12 @@
 const amqp = require('amqplib')
-const https = require('https')
+const fetch = require('node-fetch')
 const fs = require('fs')
 const logger = require('@wizo06/logger')
 
 const config = require('@iarna/toml').parse(fs.readFileSync('config/config.toml'))
 
 const download = msg => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const {
       userId,
       username,
@@ -21,10 +21,13 @@ const download = msg => {
     const downloadPath = `archive/${platform}/${userId}(${username}) - ${postId} - ${mediaId}${ext}`
     const file = fs.createWriteStream(downloadPath)
     logger.info(`Downloading to: ${downloadPath}`)
-    https.get(url, res => {
-      res.pipe(file)
-      res.on('end', () => resolve())
-    })
+
+    const opts = {}
+    if (platform === 'pixiv') opts.headers = { 'Referer': 'https://www.pixiv.net/' }
+    
+    const res = await fetch(url, opts)
+    res.body.pipe(file)
+    res.body.on('end', () => resolve())
   })
 }
 
