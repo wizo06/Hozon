@@ -15,6 +15,7 @@ npm i
 3. To start scraping, follow the steps for the specific social media you want to scrape from.
 
 - [Instagram](#instagram)
+- [Pixiv](#pixiv)
 - [Twitter](#twitter)
 
 ## Instagram
@@ -41,12 +42,30 @@ cookie = 'mysupersecretcookiesessionid'
 
 **Step 2: Watchlist**
 
-Provide a list of usernames whose media you want to scrape from, by adding each username inside `watchlist/instagram.txt`. One line per username.
+Provide a list of usernames whose images you want to scrape from, by adding each username inside `watchlist/instagram.txt`. One line per username.
 
 **Step 3: Start the scraper**
 
 ```
 npm run instagram
+```
+
+## Pixiv
+
+**Step 1: Watchlist**
+
+Provide a list of user IDs whose images you want to scrape from, by adding each user ID inside `watchlist/pixiv.txt`. One line per user ID.
+
+The user ID is the number in the URL when you navigate to a user's profile. For example, if the user ID is `1234567`, then the URL will look something like this:
+
+```
+https://www.pixiv.net/en/users/1234567
+```
+
+**Step 2: Start the scraper**
+
+```
+npm run pixiv
 ```
 
 ## Twitter
@@ -65,7 +84,7 @@ bearer = "mysupersecretbearertoken"
 
 **Step 2: Watchlist**
 
-Provide a list of usernames whose media you want to scrape from, by adding each username inside `watchlist/twitter.txt`. One line per username.
+Provide a list of usernames whose images you want to scrape from, by adding each username inside `watchlist/twitter.txt`. One line per username.
 
 **Step 3: Start the scraper**
 

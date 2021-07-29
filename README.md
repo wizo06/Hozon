@@ -12,14 +12,15 @@ Hozon (保存), meaning "preserve" in Japanese, is an application for archiving 
 ## Supported platforms
 
 - Instagram
+- Pixiv
 - Twitter
 
 ## Getting Started
 
 Hozon consists of 2 components:
 
-1. **Scraper**: finds the download link of a media.
-2. **Downloader**: downloads the media.
+1. **Scraper**: finds the download link of the image.
+2. **Downloader**: downloads the image.
 
 The way that the *scraper* talks to the *downloader* is through **RabbitMQ**, which is message broker.
 
