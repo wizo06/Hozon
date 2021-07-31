@@ -29,7 +29,7 @@ const getUserIdByUsername = (username) => {
           const data = $(this)['0'].children[0]?.data
           const dataObj = data.replace(/(^window\._sharedData\s*=\s*)|(;$)/gi, '')
           const json = JSON.parse(dataObj)
-          if (json.entry_data.HttpErrorPage) return reject(json)
+          if (json.entry_data.HttpErrorPage) return resolve(null)
           resolve(json.entry_data.ProfilePage[0]?.graphql?.user?.id)
         }
       })    
@@ -123,6 +123,11 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
   
     for await (const username of rl) {
       const userId = await getUserIdByUsername(username)
+      
+      if (userId === null) {
+        logger.warning('Profile does not exist')
+        continue
+      }
 
       const myUrl = new URL(`https://www.instagram.com/graphql/query/`)
       myUrl.searchParams.set('query_hash', '8c2a529969ee035a5063f2fc8602a0fd')

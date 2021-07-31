@@ -39,6 +39,7 @@ Open the `config/config.toml` file, and set `instagram.cookie` to your Cookie se
 [instagram]
 cookie = 'mysupersecretcookiesessionid'
 ```
+**NOTE**: Private profiles cannot be accessed. However, if the provided Cookie Session ID is from an account that is already following a private profile, then that private profile can be accessed.
 
 **Step 2: Watchlist**
 
