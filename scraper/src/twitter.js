@@ -18,7 +18,7 @@ const getUserIdByUsername = async (username) => {
     }
     const res = await fetch(`https://api.twitter.com/2/users/by/username/${username}`, opts)
     const json = await res.json()
-    if (json.errors) return Promise.reject(json)
+    if (json.errors) return Promise.resolve(null)
     return Promise.resolve(json.data?.id)
   }
   catch (e) {
@@ -36,8 +36,10 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
     const res = await fetch(myUrl.href, opts)
     const json = await res.json()
 
-    if (json.errors) return logger.error(json.errors)
-    if (json.status === 401) return logger.error(json)
+    if (json.errors?.[0]?.title === 'Authorization Error') {
+      logger.warning('Profile is private. Cannot be accessed.')
+      return Promise.resolve()
+    }
 
     // Fetch media links if current pagination has them.
     // Media links are inside .includes
@@ -95,6 +97,11 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
 
     for await (const username of rl) {
       const userId = await getUserIdByUsername(username)
+
+      if (userId === null) {
+        logger.warning('Profile does not exist')
+        continue
+      }
   
       const myUrl = new URL(`https://api.twitter.com/2/users/${userId}/tweets`)
       myUrl.searchParams.set('max_results', '100')
@@ -112,6 +119,6 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
     await rabbit.closeConnection({ connection, channel })
   }
   catch (e) {
-    logger.error(e)
+    console.error(e)
   }
 })()
