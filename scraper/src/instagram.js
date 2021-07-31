@@ -54,6 +54,10 @@ const fetchAndSend = async (myUrl, opts, userId, username, channel) => {
     const has_next_page = body.data.user.edge_owner_to_timeline_media.page_info.has_next_page
     const edges = body.data.user.edge_owner_to_timeline_media.edges
 
+    // If there are 0 edges, that means the profile is private and cannot
+    // be accessed with the provided cookie session.
+    if (edges.length === 0) logger.warning('Profile is private. Cannot be accessed.')
+
     for (const edge of edges) {
       const postId = edge.node.shortcode
       const childEdges = edge.node.edge_sidecar_to_children?.edges
