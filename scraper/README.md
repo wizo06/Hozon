@@ -39,7 +39,6 @@ Open the `config/config.toml` file, and set `instagram.cookie` to your Cookie se
 [instagram]
 cookie = 'mysupersecretcookiesessionid'
 ```
-**NOTE**: Private profiles cannot be accessed. However, if the provided Cookie Session ID is from an account that is already following a private profile, then that private profile can be accessed.
 
 **Step 2: Watchlist**
 
@@ -50,6 +49,8 @@ Provide a list of usernames whose images you want to scrape from, by adding each
 ```
 npm run instagram
 ```
+
+**NOTE**: Private profiles cannot be accessed. However, if the provided Cookie Session ID is from an account that is already following a private profile, then that private profile can be accessed.
 
 ## Pixiv
 
@@ -68,6 +69,8 @@ https://www.pixiv.net/en/users/1234567
 ```
 npm run pixiv
 ```
+
+**NOTE**: Illustrations that are marked as "sensitive content" cannot be scraped.
 
 ## Twitter
 **Step 1: API token**
@@ -92,3 +95,5 @@ Provide a list of usernames whose images you want to scrape from, by adding each
 ```
 npm run twitter
 ```
+
+**NOTE**: Private profiles cannot be accessed.
