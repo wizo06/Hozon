@@ -11,6 +11,7 @@ Hozon (保存), meaning "preserve" in Japanese, is an application for archiving 
 
 ## Supported platforms
 
+- Artstation
 - Instagram
 - Pixiv
 - Twitter

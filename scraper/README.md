@@ -14,9 +14,32 @@ npm i
 
 3. To start scraping, follow the steps for the specific social media you want to scrape from.
 
+- [Artstation](#artstation)
 - [Instagram](#instagram)
 - [Pixiv](#pixiv)
 - [Twitter](#twitter)
+
+## Artstation
+
+**Step 1: Watchlist**
+
+Provide a list of usernames whose images you want to scrape from, by adding each username inside `watchlist/artstation.txt`. One line per username.
+
+The username can be found in the URL when you navigate to a user's profile. For example, if the username is `asdf`, then the URL will look something like this:
+
+```
+https://www.artstation.com/asdf
+```
+or
+```
+https://asdf.artstation.com/
+```
+
+**Step 2: Start the scraper**
+
+```
+npm run artstation
+```
 
 ## Instagram
 

@@ -14,7 +14,8 @@ const readline = require('readline')
       crlfDelay: Infinity
     })
   
-    for await (const userId of rl) {  
+    for await (const userId of rl) {
+      logger.info(`Retrieving posts for ${userId}`)  
       const res = await fetch(`https://www.pixiv.net/ajax/user/${userId}/profile/all`)
       const json = await res.json()
 
